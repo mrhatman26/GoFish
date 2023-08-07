@@ -25,7 +25,7 @@ public class Dealer {
                     players[i].setCards(newCards[j]);
                 }
                 else{
-                    players[i].setCards(players[i].getCards() + " | " + newCards[j]);
+                    players[i].setCards(players[i].getCards() + " + " + newCards[j]);
                 }
             }
             if (!players[i].getIsPlayer()){
@@ -37,6 +37,7 @@ public class Dealer {
                 System.out.println(players[i].getCards());
                 Misc.pauseSeconds(3);
             }
+            players[i].pairCheck();
         }
     }
 }

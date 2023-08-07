@@ -15,7 +15,7 @@ public class Misc {
         int playerCount;
         while (true){
             System.out.println("How many players?");
-            System.out.println("(Minimum is 2 and max is 10 if you want to stay sane)");
+            System.out.println("(Minimum is 1 and max is 10 if you want to stay sane)");
             System.out.print("Player count: ");
             String input = Main.uInput.nextLine();
             if (!isNumber(input)){
@@ -24,7 +24,7 @@ public class Misc {
             }
             else{
                 playerCount = Integer.parseInt(input);
-                if (playerCount < 2){
+                if (playerCount < 1){
                     System.out.println("\nInput must be greater than or equal to 2!\n");
                 }
                 else{
@@ -42,5 +42,41 @@ public class Misc {
         catch (InterruptedException e){
             Thread.currentThread().interrupt();
         }
+    }
+
+    public static String arrayToString(String[] value, boolean addPlus, boolean removeEmpty){
+        String arrayAsString = "";
+        for (int i = 0; i < value.length; i++){
+            if (arrayAsString.equals("")){
+                if (removeEmpty){
+                    if (!value[i].equals("")){
+                        arrayAsString = value[i];
+                    }
+                }
+                else{
+                    arrayAsString = value[i];
+                }
+            }
+            else{
+                if (removeEmpty){
+                    if (!value[i].equals("")){
+                        if (addPlus){
+                            arrayAsString = arrayAsString + "+" + value[i];
+                        }
+                        else{
+                            arrayAsString = arrayAsString + value[i];
+                        }
+                    }
+                }
+                else {
+                    if (addPlus) {
+                        arrayAsString = arrayAsString + "+" + value[i];
+                    } else {
+                        arrayAsString = arrayAsString + value[i];
+                    }
+                }
+            }
+        }
+        return arrayAsString;
     }
 }
