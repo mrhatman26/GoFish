@@ -35,6 +35,6 @@ public class Main {
             dealer.firstServe(players, playerCount);
             break;
         }
-        Misc.closeUserInput();
+        UserInput.closeUserInput();
     }
 }
