@@ -11,8 +11,8 @@ public class Misc {
         }
     }
 
-    public static Boolean checkInRange(int value, int min, int max, boolean checkMax){
-        if (value < min){
+    public static Boolean checkInRange(int value, int min, int max, boolean checkMin, boolean checkMax){
+        if (value < min && checkMin){
             return false;
         }
         else if (value > max && checkMax){
@@ -36,7 +36,7 @@ public class Misc {
             }
             else{
                 playerCount = Integer.parseInt(input);
-                if (!checkInRange(playerCount, 1, 0,false )){
+                if (!checkInRange(playerCount, 1, 0,true, false )){
                     System.out.println("\nInput must be greater than or equal to 1!\n");
                 }
                 else{
