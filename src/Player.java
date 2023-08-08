@@ -76,6 +76,15 @@ public class Player {
             Misc.pauseSeconds(2);
         }
 
+        /*public void playerTurn(){
+            if (this.getIsPlayer()) { // Player's turn
+                //e
+            }
+            else{
+                //AI Turn
+            }
+        }*/
+
         //To do: Check if player is out of cards!
     }
 }

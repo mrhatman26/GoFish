@@ -1,6 +1,19 @@
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.util.concurrent.TimeUnit;
+import java.util.Scanner;
 public class Misc {
+    static Scanner uInput = new Scanner(System.in);
+
+    public static String getUserInput(String message){
+        System.out.print(message + ": ");
+        String input = Main.uInput.nextLine();
+        return input;
+    }
+
+    public static void closeUserInput(){
+        uInput.close();
+    }
+
     public static Boolean isNumber(String value){
         try{
             Integer.parseInt(value);
@@ -28,8 +41,9 @@ public class Misc {
         while (true){
             System.out.println("How many players?");
             System.out.println("(Minimum is 1 and max is 10 if you want to stay sane)");
-            System.out.print("Player count: ");
-            String input = Main.uInput.nextLine();
+            //System.out.print("Player count: ");
+            //String input = Main.uInput.nextLine();
+            String input = getUserInput("Player count");
             if (!isNumber(input)){
                 System.out.println("\nInput must be a whole number!\n");
                 pauseSeconds(1);
