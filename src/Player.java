@@ -55,7 +55,6 @@ public class Player {
             for (int j = 0; j < cardList.length; j++){
                 if (cardList[j].equals(cardList[i])){
                     if (i != j) {
-                        System.out.println("cardList[" + j +"](j) with the value of " + cardList[j] + " is equal to cardList[" + i + "](i) with value of " + cardList[i]);
                         cardList[i] = "";
                         cardList[j] = "";
                         this.setPairs(this.getPairs() + 1);
@@ -76,5 +75,7 @@ public class Player {
             }
             Misc.pauseSeconds(2);
         }
+
+        //To do: Check if player is out of cards!
     }
 }
