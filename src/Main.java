@@ -30,9 +30,12 @@ public class Main {
         int rounds = 1;
         Boolean runLoop = true;
         while (runLoop){
-            System.out.println(rounds + " begins...");
+            System.out.println("Round " + rounds + " begins...");
             Misc.pauseSeconds(1);
             dealer.firstServe(players, playerCount);
+            for (int i = 0; i < players.length; i++){
+                players[i].playerTurn(players, dealer);
+            }
             break;
         }
         UserInput.closeUserInput();

@@ -3,14 +3,18 @@ import java.util.Random;
 public class Player {
     private String name;
     private String cards;
+    String choice = "";
     private int pairs;
+    int choiceInt = 1;
     private Boolean isPlayer;
+    private Boolean lied;
     Player(){
         Random rand = new Random();
         this.name = Main.Names[rand.nextInt(Main.Names.length)];
         this.cards = "";
         this.isPlayer = false;
         this.pairs = 0;
+        this.lied = false;
     }
 
     //Get methods
@@ -30,6 +34,10 @@ public class Player {
         return this.isPlayer;
     }
 
+    public Boolean getLied(){
+        return this.lied;
+    }
+
     //Set methods
     public void setName(String value){
         this.name = value;
@@ -47,13 +55,17 @@ public class Player {
         this.isPlayer = value;
     }
 
+    public void setLied(Boolean value){
+        this.lied = value;
+    }
+
     //Methods
-    public void pairCheck(){
+    public void pairCheck() {
         String[] cardList = cards.split(" \\+ ");
         Boolean foundPairs = false;
-        for (int i = 0; i < cardList.length; i++){
-            for (int j = 0; j < cardList.length; j++){
-                if (cardList[j].equals(cardList[i])){
+        for (int i = 0; i < cardList.length; i++) {
+            for (int j = 0; j < cardList.length; j++) {
+                if (cardList[j].equals(cardList[i])) {
                     if (i != j) {
                         cardList[i] = "";
                         cardList[j] = "";
@@ -64,27 +76,89 @@ public class Player {
             }
         }
         this.setCards(Misc.arrayToString(cardList, true, true));
-        if (foundPairs){
+        if (foundPairs) {
             if (this.getIsPlayer()) {
                 System.out.println("You found some pairs! Your score is now " + this.getPairs());
                 Misc.pauseSeconds(1);
                 System.out.println("Your cards are now:\n" + this.getCards());
-            }
-            else{
+            } else {
                 System.out.println("It would seem that " + this.getName() + " found some pairs.");
             }
             Misc.pauseSeconds(2);
         }
+        //To do: Check if player is out of cards!
+    }
 
-        /*public void playerTurn(){
-            if (this.getIsPlayer()) { // Player's turn
-                //e
+    public void playerTurn(Player[] players, Dealer dealer){
+        if (this.getIsPlayer()) { // Player's turn
+            getPlayerChoice(players);
+            getLieChoice();
+            getCardChoice(dealer);
+        }
+        /*else{
+            //AI Turn
+        }*/
+    }
+
+    private void getPlayerChoice(Player[] players){
+        Boolean uInputAccepted = false;
+        while (!uInputAccepted) {
+            System.out.println("\nIt's your turn, which player do you want to pick?");
+            Misc.pauseSeconds(1);
+            System.out.println("Players:");
+            for (int i = 1; i < players.length; i++) {
+                System.out.println(i + ": " + players[i].getName());
+            }
+            choice = (UserInput.getUserInput("Player Number: "));
+            if (!Misc.isNumber(choice)){
+                System.out.println("\nPlayer choice must be a number!");
+            }
+            else {
+                choiceInt = Integer.parseInt(choice);
+                if (!Misc.checkInRange(choiceInt, 1, players.length, true, true)){
+                    System.out.println("\nPlayer choice must match a player number!");
+                }
+                else{
+                    uInputAccepted = true;
+                }
+            }
+        }
+    }
+
+    private void getLieChoice(){
+        Boolean uInputAccepted = false;
+        while (!uInputAccepted){
+            System.out.println("\nDo you want to use your cards or lie with a fake card?");
+            choice = UserInput.getUserInput("Lie (L) or Truth (T)");
+            if (choice.equals("")){
+                System.out.println("\nPlease enter something!");
+                Misc.pauseSeconds(3);
+            }
+            else if (!choice.toUpperCase().equals("L") && !choice.toUpperCase().equals("T")){
+                System.out.println("Please enter either L or T!");
+                Misc.pauseSeconds(3);
             }
             else{
-                //AI Turn
+                choice = choice.toUpperCase();
             }
-        }*/
+        }
+    }
 
-        //To do: Check if player is out of cards!
+    private void getCardChoice(Dealer dealer){
+        String[] cardChoices;
+        if (choice.equals("L")){
+            cardChoices = dealer.getCards();
+            this.setLied(true);
+        }
+        else{
+            cardChoices = this.getCards().split(" + ");
+            this.setLied(false);
+        }
+        System.out.println("Which card would you like to ask for?\nYou can pick from:");
+        for (int i = 0; i < cardChoices.length; i++){
+            System.out.println(String.valueOf(i + 1) + ": " + cardChoices[i]);
+        }
+        choice = UserInput.getUserInput("Card number: ");
+        //Finish this!
     }
 }
