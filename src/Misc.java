@@ -75,7 +75,7 @@ public class Misc {
                 if (removeEmpty){
                     if (!value[i].equals("")){
                         if (addPlus){
-                            arrayAsString = arrayAsString + "+" + value[i];
+                            arrayAsString = arrayAsString + " + " + value[i];
                         }
                         else{
                             arrayAsString = arrayAsString + value[i];
@@ -84,7 +84,7 @@ public class Misc {
                 }
                 else {
                     if (addPlus) {
-                        arrayAsString = arrayAsString + "+" + value[i];
+                        arrayAsString = arrayAsString + " + " + value[i];
                     } else {
                         arrayAsString = arrayAsString + value[i];
                     }

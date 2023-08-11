@@ -35,9 +35,23 @@ public class Dealer {
             else{
                 System.out.print("\nThe dealer hands you your first 7 cards.\nThey are: ");
                 System.out.println(players[i].getCards());
-                Misc.pauseSeconds(3);
+                UserInput.pauseForEnterKey();
             }
             players[i].pairCheck();
         }
+    }
+
+    public void giveCard(Player player){
+        Random rand = new Random();
+        String newCard = cards[rand.nextInt(cards.length)];
+        player.setCards(player.getCards() + " + " + newCard);
+        if (player.getIsPlayer()) {
+            System.out.println("The dealer hands you a new card. It is a " + newCard + "\nYour cards are now: " + player.getCards());
+            UserInput.pauseForEnterKey();
+        }
+        else{
+            System.out.println("The dealer hands " + player.getName() + " a new card.");
+        }
+        player.pairCheck();
     }
 }

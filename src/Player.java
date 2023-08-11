@@ -78,15 +78,17 @@ public class Player {
         this.setCards(Misc.arrayToString(cardList, true, true));
         if (foundPairs) {
             if (this.getIsPlayer()) {
-                System.out.println("You found some pairs! Your score is now " + this.getPairs());
+                System.out.println("\nYou found some pairs! Your score is now " + this.getPairs());
                 Misc.pauseSeconds(1);
                 System.out.println("Your cards are now:\n" + this.getCards());
+                UserInput.pauseForEnterKey();
             } else {
                 System.out.println("It would seem that " + this.getName() + " found some pairs.");
+                Misc.pauseSeconds(2);
             }
-            Misc.pauseSeconds(2);
         }
         //To do: Check if player is out of cards!
+        //Also to do: Check why this method is giving players the wrong amount of pairs!
     }
 
     public void playerTurn(Player[] players, Dealer dealer){
@@ -94,37 +96,82 @@ public class Player {
             getPlayerChoice(players);
             getLieChoice();
             getCardChoice(dealer);
-            System.out.println("Player choice is: " + choiceInt + "\nLie choice is: " + this.getLied() + "\nCard choice is: " + choice);
-            UserInput.pauseForEnterKey();
+            //System.out.println("Player choice is: " + choiceInt + "\nLie choice is: " + this.getLied() + "\nCard choice is: " + choice);
+            //UserInput.pauseForEnterKey();
+            hasCardCheck(this, players[choiceInt], dealer);
         }
         /*else{
             //AI Turn
         }*/
     }
 
+    public void hasCardCheck(Player playerChecking, Player playerToCheck, Dealer dealer){
+        String[] playerCheckingCards;
+        Boolean pairFound = false;
+        if (playerChecking.getIsPlayer()) {
+            if (playerChecking.getLied()) {
+                playerCheckingCards = dealer.getCards();
+            } else {
+                playerCheckingCards = playerChecking.getCards().split(" \\+ ");
+            }
+            String[] playerToCheckCards = playerToCheck.getCards().split(" \\+ ");
+            //System.out.println("\n" + playerToCheck.getCards() + "\n");
+            for (int i = 0; i < playerToCheckCards.length; i++){
+                //System.out.println(i);
+                if (playerToCheckCards[i].equals(playerCheckingCards[Integer.valueOf(choice)])){
+                    playerCheckingCards[Integer.valueOf(choice)] = "";
+                    playerToCheckCards[i] = "";
+                    playerChecking.setPairs(playerChecking.getPairs() + 1);
+                    pairFound = true;
+                    break;
+                }
+            }
+            if (pairFound) {
+                playerToCheck.setCards(Misc.arrayToString(playerCheckingCards, true, true));
+                playerChecking.setCards(Misc.arrayToString(playerCheckingCards, true, true));
+                System.out.println(playerToCheck.getName() + " had your card! Your score is now " + playerChecking.getPairs());
+                Misc.pauseSeconds(2);
+                System.out.println("Your cards are now: " + playerChecking.getCards());
+                UserInput.pauseForEnterKey();
+            }
+            else {
+                System.out.println(playerToCheck.getName() + " tells you to Go Fish.");
+                dealer.giveCard(playerChecking);
+                UserInput.pauseForEnterKey();
+            }
+        }
+    }
+
     private void getPlayerChoice(Player[] players){
         Boolean uInputAccepted = false;
         while (!uInputAccepted) {
-            System.out.println("\nIt's your turn, which player do you want to pick?");
-            Misc.pauseSeconds(1);
-            System.out.println("Players:");
-            for (int i = 1; i < players.length; i++) {
-                System.out.println(i + ": " + players[i].getName());
-            }
-            choice = (UserInput.getUserInput("Player Number"));
-            if (!Misc.isNumber(choice)){
-                System.out.println("\nPlayer choice must be a number!");
-            }
-            else {
-                choiceInt = Integer.parseInt(choice);
-                if (!Misc.checkInRange(choiceInt, 1, players.length, true, true)){
-                    System.out.println("\nPlayer choice must match a player number!");
+            if (players.length > 2 ) {
+                System.out.println("\nIt's your turn, which player do you want to pick?");
+                Misc.pauseSeconds(1);
+                System.out.println("Players:");
+                for (int i = 1; i < players.length; i++) {
+                    System.out.println(i + ": " + players[i].getName());
                 }
-                else{
-                    System.out.println("\nYou chose " + players[choiceInt].getName());
+                choice = (UserInput.getUserInput("Player Number"));
+                if (!Misc.isNumber(choice)) {
+                    System.out.println("\nPlayer choice must be a number!");
                     Misc.pauseSeconds(3);
-                    uInputAccepted = true;
+                } else {
+                    choiceInt = Integer.parseInt(choice);
+                    if (!Misc.checkInRange(choiceInt, 1, players.length, true, true)) {
+                        System.out.println("\nPlayer choice must match a player number!");
+                        Misc.pauseSeconds(3);
+                    } else {
+                        System.out.println("\nYou chose " + players[choiceInt].getName());
+                        Misc.pauseSeconds(3);
+                        uInputAccepted = true;
+                    }
                 }
+            }
+            else{
+                System.out.println("\nIt's your turn.");
+                choiceInt = 1;
+                uInputAccepted = true;
             }
         }
     }
@@ -156,7 +203,7 @@ public class Player {
             this.setLied(true);
         }
         else{
-            cardChoices = this.getCards().split("\\+");
+            cardChoices = this.getCards().split(" \\+ ");
             this.setLied(false);
         }
         while (true) {
@@ -174,6 +221,7 @@ public class Player {
                 Misc.pauseSeconds(3);
             }
             else{
+                choice = String.valueOf(Integer.valueOf(choice) - 1);
                 break;
             }
         }
