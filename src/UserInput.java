@@ -10,8 +10,13 @@ public class UserInput {
         else{
             System.out.print("Input: ");
         }
-        String input = Main.uInput.nextLine();
+        String input = uInput.nextLine();
         return input;
+    }
+
+    public static void pauseForEnterKey(){
+        System.out.print("Press ENTER to continue");
+        uInput.nextLine();
     }
 
     public static void closeUserInput(){

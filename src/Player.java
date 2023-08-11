@@ -94,6 +94,8 @@ public class Player {
             getPlayerChoice(players);
             getLieChoice();
             getCardChoice(dealer);
+            System.out.println("Player choice is: " + choiceInt + "\nLie choice is: " + this.getLied() + "\nCard choice is: " + choice);
+            UserInput.pauseForEnterKey();
         }
         /*else{
             //AI Turn
@@ -109,7 +111,7 @@ public class Player {
             for (int i = 1; i < players.length; i++) {
                 System.out.println(i + ": " + players[i].getName());
             }
-            choice = (UserInput.getUserInput("Player Number: "));
+            choice = (UserInput.getUserInput("Player Number"));
             if (!Misc.isNumber(choice)){
                 System.out.println("\nPlayer choice must be a number!");
             }
@@ -119,6 +121,8 @@ public class Player {
                     System.out.println("\nPlayer choice must match a player number!");
                 }
                 else{
+                    System.out.println("\nYou chose " + players[choiceInt].getName());
+                    Misc.pauseSeconds(3);
                     uInputAccepted = true;
                 }
             }
@@ -140,6 +144,7 @@ public class Player {
             }
             else{
                 choice = choice.toUpperCase();
+                break;
             }
         }
     }
@@ -151,14 +156,26 @@ public class Player {
             this.setLied(true);
         }
         else{
-            cardChoices = this.getCards().split(" + ");
+            cardChoices = this.getCards().split("\\+");
             this.setLied(false);
         }
-        System.out.println("Which card would you like to ask for?\nYou can pick from:");
-        for (int i = 0; i < cardChoices.length; i++){
-            System.out.println(String.valueOf(i + 1) + ": " + cardChoices[i]);
+        while (true) {
+            System.out.println("\nWhich card would you like to ask for?\nYou can pick from:");
+            for (int i = 0; i < cardChoices.length; i++) {
+                System.out.println(String.valueOf(i + 1) + ": " + cardChoices[i]);
+            }
+            choice = UserInput.getUserInput("Card number");
+            if (!Misc.isNumber(choice)){
+                System.out.println("\nInput must be a number");
+                Misc.pauseSeconds(3);
+            }
+            else if (!Misc.checkInRange(Integer.valueOf(choice), 1, cardChoices.length, true, true)){
+                System.out.println("\nInput must match card number!");
+                Misc.pauseSeconds(3);
+            }
+            else{
+                break;
+            }
         }
-        choice = UserInput.getUserInput("Card number: ");
-        //Finish this!
     }
 }
