@@ -62,11 +62,6 @@ public class Player {
     //Methods
     public void pairCheck() {
         String[] cardList = cards.split(" \\+ ");
-        System.out.println("This player's cards are the following:");
-        for (int i = 0; i < cardList.length; i++){
-            System.out.println(cardList[i].replace(" ", "+!!!!"));
-        }
-        UserInput.pauseForEnterKey();
         Boolean foundPairs = false;
         for (int i = 0; i < cardList.length; i++) {
             for (int j = 0; j < cardList.length; j++) {
