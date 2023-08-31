@@ -70,6 +70,7 @@ public class Player {
                         cardList[i] = "";
                         cardList[j] = "";
                         this.setPairs(this.getPairs() + 1);
+                        System.out.println("Pairs is now: " + this.getPairs());
                         foundPairs = true;
                     }
                 }
