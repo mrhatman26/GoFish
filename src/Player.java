@@ -62,16 +62,22 @@ public class Player {
     //Methods
     public void pairCheck() {
         String[] cardList = cards.split(" \\+ ");
+        System.out.println("This player's cards are the following:");
+        for (int i = 0; i < cardList.length; i++){
+            System.out.println(cardList[i].replace(" ", "+!!!!"));
+        }
+        UserInput.pauseForEnterKey();
         Boolean foundPairs = false;
         for (int i = 0; i < cardList.length; i++) {
             for (int j = 0; j < cardList.length; j++) {
-                if (cardList[j].equals(cardList[i])) {
-                    if (i != j) {
-                        cardList[i] = "";
-                        cardList[j] = "";
-                        this.setPairs(this.getPairs() + 1);
-                        System.out.println("Pairs is now: " + this.getPairs());
-                        foundPairs = true;
+                if (!cardList[j].equals("") && !cardList[i].equals("")){
+                    if (cardList[j].equals(cardList[i])) {
+                        if (i != j) {
+                            cardList[i] = "";
+                            cardList[j] = "";
+                            this.setPairs(this.getPairs() + 1);
+                            foundPairs = true;
+                        }
                     }
                 }
             }
@@ -84,12 +90,11 @@ public class Player {
                 System.out.println("Your cards are now:\n" + this.getCards());
                 UserInput.pauseForEnterKey();
             } else {
-                System.out.println("It would seem that " + this.getName() + " found some pairs.");
+                System.out.println("It would seem that " + this.getName() + " found some pairs.");//\nThis player's cards are now: " + this.getCards() + "\nAnd their score is " + this.getPairs());
                 Misc.pauseSeconds(2);
             }
         }
         //To do: Check if player is out of cards!
-        //Also to do: Check why this method is giving players the wrong amount of pairs!
     }
 
     public void playerTurn(Player[] players, Dealer dealer){
