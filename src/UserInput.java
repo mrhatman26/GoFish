@@ -19,6 +19,26 @@ public class UserInput {
         uInput.nextLine();
     }
 
+    public static boolean getUserInputBoolean(String message){
+        String input = "";
+        Boolean returnVal = false;
+        while (true) {
+            input = getUserInput(message).toUpperCase();
+            if (input.equals("Y") || input.equals("YES")){
+                returnVal = true;
+                break;
+            }
+            else if (input.equals("N") || input.equals("NO")){
+                break;
+            }
+            else{
+                System.out.println("\nPlease enter Y or N!\n");
+                Misc.pauseSeconds(3);
+            }
+        }
+        return returnVal;
+    }
+
     public static void closeUserInput(){
         uInput.close();
     }

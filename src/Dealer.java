@@ -46,7 +46,8 @@ public class Dealer {
         String newCard = cards[rand.nextInt(cards.length)];
         player.setCards(player.getCards() + " + " + newCard);
         if (player.getIsPlayer()) {
-            System.out.println("The dealer hands you a new card. It is a " + newCard + "\nYour cards are now: " + player.getCards());
+            UserInput.pauseForEnterKey();
+            System.out.println("\nThe dealer hands you a new card. It is a " + newCard + "\nYour cards are now: " + player.getCards());
             UserInput.pauseForEnterKey();
         }
         else{

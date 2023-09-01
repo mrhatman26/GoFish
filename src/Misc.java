@@ -26,6 +26,7 @@ public class Misc {
 
     public static int getPlayerCount(){
         int playerCount;
+        Boolean inputAccepted = false;
         while (true){
             System.out.println("How many players?");
             System.out.println("(Minimum is 1 and max is 10 if you want to stay sane)");
@@ -34,17 +35,39 @@ public class Misc {
             String input = UserInput.getUserInput("Player count");
             if (!isNumber(input)){
                 System.out.println("\nInput must be a whole number!\n");
+                inputAccepted = false;
                 pauseSeconds(1);
             }
             else{
                 playerCount = Integer.parseInt(input);
                 if (!checkInRange(playerCount, 1, 0,true, false )){
                     System.out.println("\nInput must be greater than or equal to 1!\n");
+                    inputAccepted = false;
                 }
                 else{
-                    System.out.println(input + " players selected.\n");
-                    pauseSeconds(1);
-                    return playerCount;
+                    inputAccepted = true;
+                    if (playerCount > 10){
+                        inputAccepted = false;
+                        System.out.println("\nWarning: You have asked for 11 or more players!");
+                        pauseSeconds(2);
+                        System.out.println("Things might get a little slow!");
+                        pauseSeconds(2);
+                        if (UserInput.getUserInputBoolean("Are you sure you want " + playerCount + " players? (Y/N)")){
+                            inputAccepted = true;
+                        }
+                        else{
+                            System.out.println("\nThen ask for 10 or less players you silly!");
+                            UserInput.pauseForEnterKey();
+                            System.out.print("\n");
+                        }
+                    }
+                    if (inputAccepted) {
+                        System.out.println("\n" + input + " players selected.");
+//                        pauseSeconds(1);
+                        UserInput.pauseForEnterKey();
+                        System.out.print("\n");
+                        return playerCount;
+                    }
                 }
             }
         }

@@ -164,7 +164,7 @@ public class Player {
                         Misc.pauseSeconds(3);
                     } else {
                         System.out.println("\nYou chose " + players[choiceInt].getName());
-                        Misc.pauseSeconds(3);
+                        UserInput.pauseForEnterKey();
                         uInputAccepted = true;
                     }
                 }
