@@ -92,107 +92,138 @@ public class Player {
         //To do: Check if player is out of cards!
     }
 
-    public void playerTurn(Player[] players, Dealer dealer){
-        if (this.getIsPlayer()) { // Player's turn
+    public void playerTurn(Player[] players, Dealer dealer){ // Player's turn
+        getPlayerChoice(players);
+        getLieChoice();
+        getCardChoice(dealer);
+        //System.out.println("Player choice is: " + choiceInt + "\nLie choice is: " + this.getLied() + "\nCard choice is: " + choice);
+        //UserInput.pauseForEnterKey();
+        hasCardCheck(this, players[choiceInt], dealer);
+        /*else{
             getPlayerChoice(players);
             getLieChoice();
             getCardChoice(dealer);
-            //System.out.println("Player choice is: " + choiceInt + "\nLie choice is: " + this.getLied() + "\nCard choice is: " + choice);
-            //UserInput.pauseForEnterKey();
-            hasCardCheck(this, players[choiceInt], dealer);
-        }
-        /*else{
-            //AI Turn
         }*/
     }
 
     public void hasCardCheck(Player playerChecking, Player playerToCheck, Dealer dealer){
         String[] playerCheckingCards;
         Boolean pairFound = false;
-        if (playerChecking.getIsPlayer()) {
-            if (playerChecking.getLied()) {
-                playerCheckingCards = dealer.getCards();
-            } else {
-                playerCheckingCards = playerChecking.getCards().split(" \\+ ");
+        //if (playerChecking.getIsPlayer()) {
+        if (playerChecking.getLied()) {
+            playerCheckingCards = dealer.getCards();
+        } else {
+            playerCheckingCards = playerChecking.getCards().split(" \\+ ");
+        }
+        String[] playerToCheckCards = playerToCheck.getCards().split(" \\+ ");
+        char cardChoiceBackup = playerCheckingCards[Integer.valueOf(choice)].charAt(0);
+        //System.out.println("\n" + playerToCheck.getCards() + "\n");
+        for (int i = 0; i < playerToCheckCards.length; i++){
+            //System.out.println(i);
+            if (playerToCheckCards[i].equals(playerCheckingCards[Integer.valueOf(choice)])){
+                playerCheckingCards[Integer.valueOf(choice)] = "";
+                playerToCheckCards[i] = "";
+                playerChecking.setPairs(playerChecking.getPairs() + 1);
+                pairFound = true;
+                break;
             }
-            String[] playerToCheckCards = playerToCheck.getCards().split(" \\+ ");
-            //System.out.println("\n" + playerToCheck.getCards() + "\n");
-            for (int i = 0; i < playerToCheckCards.length; i++){
-                //System.out.println(i);
-                if (playerToCheckCards[i].equals(playerCheckingCards[Integer.valueOf(choice)])){
-                    playerCheckingCards[Integer.valueOf(choice)] = "";
-                    playerToCheckCards[i] = "";
-                    playerChecking.setPairs(playerChecking.getPairs() + 1);
-                    pairFound = true;
-                    break;
-                }
-            }
-            if (pairFound) {
+        }
+        if (pairFound) {
+            if (this.getIsPlayer()) {
                 playerToCheck.setCards(Misc.arrayToString(playerCheckingCards, true, true));
                 playerChecking.setCards(Misc.arrayToString(playerCheckingCards, true, true));
                 System.out.println(playerToCheck.getName() + " had your card! Your score is now " + playerChecking.getPairs());
-                Misc.pauseSeconds(2);
+                Misc.pauseSeconds(2); //Change this to only increase the player's score if THEY have a pair, not just if the other player has their card. You dumbass!
                 System.out.println("Your cards are now: " + playerChecking.getCards());
-                UserInput.pauseForEnterKey();
             }
-            else {
+            else{
+                System.out.println(this.getName() + " asked " + playerToCheck.getName() + " if they had a " + cardChoiceBackup + "..."); //playerCheckingCards[Integer.parseInt(choice)]
+                Misc.pauseSeconds(1);
+                System.out.println(playerToCheck.getName() + " had the card " + this.getName() + " wanted!");
+                Misc.pauseSeconds(1);
+            }
+        }
+        else {
+            if (this.getIsPlayer()) {
                 System.out.println(playerToCheck.getName() + " tells you to Go Fish.");
                 dealer.giveCard(playerChecking);
-                UserInput.pauseForEnterKey();
+            }
+            else{
+                System.out.println(this.getName() + " asked " + playerToCheck.getName() + " if they had a " + cardChoiceBackup + "...");
+                Misc.pauseSeconds(1);
+                System.out.println(playerToCheck.getName() + " tells " + this.getName() + " to Go Fish.");
+                dealer.giveCard(playerChecking);
             }
         }
     }
 
     private void getPlayerChoice(Player[] players){
-        Boolean uInputAccepted = false;
-        while (!uInputAccepted) {
-            if (players.length > 2 ) {
-                System.out.println("\nIt's your turn, which player do you want to pick?");
-                Misc.pauseSeconds(1);
-                System.out.println("Players:");
-                for (int i = 1; i < players.length; i++) {
-                    System.out.println(i + ": " + players[i].getName());
-                }
-                choice = (UserInput.getUserInput("Player Number"));
-                if (!Misc.isNumber(choice)) {
-                    System.out.println("\nPlayer choice must be a number!");
-                    Misc.pauseSeconds(3);
-                } else {
-                    choiceInt = Integer.parseInt(choice);
-                    if (!Misc.checkInRange(choiceInt, 1, players.length, true, true)) {
-                        System.out.println("\nPlayer choice must match a player number!");
+        if (this.getIsPlayer()) {
+            Boolean uInputAccepted = false;
+            while (!uInputAccepted) {
+                if (players.length > 2) {
+                    System.out.println("\nIt's your turn, which player do you want to pick?");
+                    Misc.pauseSeconds(1);
+                    System.out.println("Players:");
+                    for (int i = 1; i < players.length; i++) {
+                        System.out.println(i + ": " + players[i].getName());
+                    }
+                    choice = (UserInput.getUserInput("Player Number (" + (players.length - 1) + ")")); //Remove the player length part!
+                    if (!Misc.isNumber(choice)) {
+                        System.out.println("\nPlayer choice must be a number!");
                         Misc.pauseSeconds(3);
                     } else {
-                        System.out.println("\nYou chose " + players[choiceInt].getName());
-                        UserInput.pauseForEnterKey();
-                        uInputAccepted = true;
+                        choiceInt = Integer.parseInt(choice);
+                        if (!Misc.checkInRange(choiceInt, 1, players.length - 1, true, true)) {
+                            System.out.println("\nPlayer choice must match a player number!");
+                            Misc.pauseSeconds(3);
+                        } else {
+                            System.out.println("\nYou chose " + players[choiceInt].getName());
+                            UserInput.pauseForEnterKey();
+                            uInputAccepted = true;
+                        }
                     }
+                } else {
+                    System.out.println("\nIt's your turn.");
+                    choiceInt = 1;
+                    uInputAccepted = true;
                 }
             }
-            else{
-                System.out.println("\nIt's your turn.");
-                choiceInt = 1;
-                uInputAccepted = true;
-            }
+        }
+        else{
+            System.out.println("\nIt's " + this.getName() + "'s turn.");
+            Misc.pauseSeconds(1);
+            Random rand = new Random();
+            choiceInt = rand.nextInt(players.length);
         }
     }
 
     private void getLieChoice(){
-        Boolean uInputAccepted = false;
-        while (!uInputAccepted){
-            System.out.println("\nDo you want to use your cards or lie with a fake card?");
-            choice = UserInput.getUserInput("Lie (L) or Truth (T)");
-            if (choice.equals("")){
-                System.out.println("\nPlease enter something!");
-                Misc.pauseSeconds(3);
+        if (this.getIsPlayer()) {
+            Boolean uInputAccepted = false;
+            while (!uInputAccepted) {
+                System.out.println("\nDo you want to use your cards or lie with a fake card?");
+                choice = UserInput.getUserInput("Lie (L) or Truth (T)");
+                if (choice.equals("")) {
+                    System.out.println("\nPlease enter something!");
+                    Misc.pauseSeconds(3);
+                } else if (!choice.toUpperCase().equals("L") && !choice.toUpperCase().equals("T")) {
+                    System.out.println("Please enter either L or T!");
+                    Misc.pauseSeconds(3);
+                } else {
+                    choice = choice.toUpperCase();
+                    break;
+                }
             }
-            else if (!choice.toUpperCase().equals("L") && !choice.toUpperCase().equals("T")){
-                System.out.println("Please enter either L or T!");
-                Misc.pauseSeconds(3);
+        }
+        else{
+            Random rand = new Random();
+            byte aiChoice = (byte) rand.nextInt(100);
+            if (aiChoice <= 75){
+                choice = "T";
             }
             else{
-                choice = choice.toUpperCase();
-                break;
+                choice = "L";
             }
         }
     }
@@ -207,24 +238,28 @@ public class Player {
             cardChoices = this.getCards().split(" \\+ ");
             this.setLied(false);
         }
-        while (true) {
-            System.out.println("\nWhich card would you like to ask for?\nYou can pick from:");
-            for (int i = 0; i < cardChoices.length; i++) {
-                System.out.println(String.valueOf(i + 1) + ": " + cardChoices[i]);
+        if (this.getIsPlayer()) {
+            while (true) {
+                System.out.println("\nWhich card would you like to ask for?\nYou can pick from:");
+                for (int i = 0; i < cardChoices.length; i++) {
+                    System.out.println(String.valueOf(i + 1) + ": " + cardChoices[i]);
+                }
+                choice = UserInput.getUserInput("Card number");
+                if (!Misc.isNumber(choice)) {
+                    System.out.println("\nInput must be a number");
+                    Misc.pauseSeconds(3);
+                } else if (!Misc.checkInRange(Integer.valueOf(choice), 1, cardChoices.length, true, true)) {
+                    System.out.println("\nInput must match card number!");
+                    Misc.pauseSeconds(3);
+                } else {
+                    choice = String.valueOf(Integer.valueOf(choice) - 1);
+                    break;
+                }
             }
-            choice = UserInput.getUserInput("Card number");
-            if (!Misc.isNumber(choice)){
-                System.out.println("\nInput must be a number");
-                Misc.pauseSeconds(3);
-            }
-            else if (!Misc.checkInRange(Integer.valueOf(choice), 1, cardChoices.length, true, true)){
-                System.out.println("\nInput must match card number!");
-                Misc.pauseSeconds(3);
-            }
-            else{
-                choice = String.valueOf(Integer.valueOf(choice) - 1);
-                break;
-            }
+        }
+        else{
+            Random rand = new Random();
+            choice = String.valueOf(rand.nextInt(cardChoices.length));
         }
     }
 }
