@@ -99,6 +99,7 @@ public class Player {
         //System.out.println("Player choice is: " + choiceInt + "\nLie choice is: " + this.getLied() + "\nCard choice is: " + choice);
         //UserInput.pauseForEnterKey();
         hasCardCheck(this, players[choiceInt], dealer);
+        this.pairCheck();
         /*else{
             getPlayerChoice(players);
             getLieChoice();
@@ -121,7 +122,7 @@ public class Player {
         for (int i = 0; i < playerToCheckCards.length; i++){
             //System.out.println(i);
             if (playerToCheckCards[i].equals(playerCheckingCards[Integer.valueOf(choice)])){
-                playerCheckingCards[Integer.valueOf(choice)] = "";
+                //playerCheckingCards[Integer.valueOf(choice)] = "";
                 playerToCheckCards[i] = "";
                 playerChecking.setPairs(playerChecking.getPairs() + 1);
                 pairFound = true;
@@ -129,11 +130,13 @@ public class Player {
             }
         }
         if (pairFound) {
+            playerToCheck.setCards(Misc.arrayToString(playerCheckingCards, true, true));
+            playerChecking.setCards(Misc.arrayToString(playerCheckingCards, true, true));
+            playerChecking.setCards(playerChecking.cards + " + " + cardChoiceBackup);
+            //playerChecking.pairCheck();
             if (this.getIsPlayer()) {
-                playerToCheck.setCards(Misc.arrayToString(playerCheckingCards, true, true));
-                playerChecking.setCards(Misc.arrayToString(playerCheckingCards, true, true));
-                System.out.println(playerToCheck.getName() + " had your card! Your score is now " + playerChecking.getPairs());
-                Misc.pauseSeconds(2); //Change this to only increase the player's score if THEY have a pair, not just if the other player has their card. You dumbass!
+                System.out.println(playerToCheck.getName() + " had your card!");// Your score is now " + playerChecking.getPairs());
+                Misc.pauseSeconds(2); 
                 System.out.println("Your cards are now: " + playerChecking.getCards());
             }
             else{
