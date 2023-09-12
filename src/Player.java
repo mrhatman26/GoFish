@@ -123,7 +123,6 @@ public class Player {
             //System.out.println(i);
             if (playerToCheckCards[i].equals(playerCheckingCards[Integer.valueOf(choice)])){
                 playerToCheckCards[i] = "";
-                playerChecking.setPairs(playerChecking.getPairs() + 1);
                 pairFound = true;
                 break;
             }
