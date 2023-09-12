@@ -122,7 +122,6 @@ public class Player {
         for (int i = 0; i < playerToCheckCards.length; i++){
             //System.out.println(i);
             if (playerToCheckCards[i].equals(playerCheckingCards[Integer.valueOf(choice)])){
-                //playerCheckingCards[Integer.valueOf(choice)] = "";
                 playerToCheckCards[i] = "";
                 playerChecking.setPairs(playerChecking.getPairs() + 1);
                 pairFound = true;
@@ -133,10 +132,9 @@ public class Player {
             playerToCheck.setCards(Misc.arrayToString(playerCheckingCards, true, true));
             playerChecking.setCards(Misc.arrayToString(playerCheckingCards, true, true));
             playerChecking.setCards(playerChecking.cards + " + " + cardChoiceBackup);
-            //playerChecking.pairCheck();
             if (this.getIsPlayer()) {
                 System.out.println(playerToCheck.getName() + " had your card!");// Your score is now " + playerChecking.getPairs());
-                Misc.pauseSeconds(2); 
+                Misc.pauseSeconds(2);
                 System.out.println("Your cards are now: " + playerChecking.getCards());
             }
             else{
@@ -197,7 +195,12 @@ public class Player {
             System.out.println("\nIt's " + this.getName() + "'s turn.");
             Misc.pauseSeconds(1);
             Random rand = new Random();
-            choiceInt = rand.nextInt(players.length);
+            while (true) {
+                choiceInt = rand.nextInt(players.length);
+                if (players[choiceInt] != this){
+                    break;
+                }
+            }
         }
     }
 
