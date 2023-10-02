@@ -26,7 +26,7 @@ public class Main {
         gameLoop(players, dealer);
     }
 
-    public static void gameLoop(Player[] players, Dealer dealer) {
+    public static void gameLoop(Player[] players, Dealer dealer){
         int rounds = 1;
         int turns = 1;
         Boolean runLoop = true;
