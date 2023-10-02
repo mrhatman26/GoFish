@@ -6,8 +6,9 @@ public class Player {
     String choice = "";
     private int pairs;
     int choiceInt = 1;
-    private Boolean isPlayer;
-    private Boolean lied;
+    private boolean isPlayer;
+    private boolean lied;
+    private boolean finished;
     Player(){
         Random rand = new Random();
         this.name = Main.Names[rand.nextInt(Main.Names.length)];
@@ -15,6 +16,7 @@ public class Player {
         this.isPlayer = false;
         this.pairs = 0;
         this.lied = false;
+        this.finished = false;
     }
 
     //Get methods
@@ -30,11 +32,11 @@ public class Player {
         return this.pairs;
     }
 
-    public Boolean getIsPlayer(){
+    public boolean getIsPlayer(){
         return this.isPlayer;
     }
 
-    public Boolean getLied(){
+    public boolean getLied(){
         return this.lied;
     }
 
@@ -51,18 +53,22 @@ public class Player {
         this.pairs = value;
     }
 
-    public void setIsPlayer(Boolean value){
+    public void setIsPlayer(boolean value){
         this.isPlayer = value;
     }
 
-    public void setLied(Boolean value){
+    public void setLied(boolean value){
         this.lied = value;
+    }
+
+    public boolean getFinished(){
+        return this.finished;
     }
 
     //Methods
     public void pairCheck() {
         String[] cardList = cards.split(" \\+ ");
-        Boolean foundPairs = false;
+        boolean foundPairs = false;
         for (int i = 0; i < cardList.length; i++) {
             for (int j = 0; j < cardList.length; j++) {
                 if (!cardList[j].equals("") && !cardList[i].equals("")){
@@ -96,20 +102,14 @@ public class Player {
         getPlayerChoice(players);
         getLieChoice();
         getCardChoice(dealer);
-        //System.out.println("Player choice is: " + choiceInt + "\nLie choice is: " + this.getLied() + "\nCard choice is: " + choice);
-        //UserInput.pauseForEnterKey();
         hasCardCheck(this, players[choiceInt], dealer);
         this.pairCheck();
-        /*else{
-            getPlayerChoice(players);
-            getLieChoice();
-            getCardChoice(dealer);
-        }*/
+        this.cardEmptyCheck();
     }
 
     public void hasCardCheck(Player playerChecking, Player playerToCheck, Dealer dealer){
         String[] playerCheckingCards;
-        Boolean pairFound = false;
+        boolean pairFound = false;
         //if (playerChecking.getIsPlayer()) {
         if (playerChecking.getLied()) {
             playerCheckingCards = dealer.getCards();
@@ -159,7 +159,7 @@ public class Player {
 
     private void getPlayerChoice(Player[] players){
         if (this.getIsPlayer()) {
-            Boolean uInputAccepted = false;
+            boolean uInputAccepted = false;
             while (!uInputAccepted) {
                 if (players.length > 2) {
                     System.out.println("\nIt's your turn, which player do you want to pick?");
@@ -205,7 +205,7 @@ public class Player {
 
     private void getLieChoice(){
         if (this.getIsPlayer()) {
-            Boolean uInputAccepted = false;
+            boolean uInputAccepted = false;
             while (!uInputAccepted) {
                 System.out.println("\nDo you want to use your cards or lie with a fake card?");
                 choice = UserInput.getUserInput("Lie (L) or Truth (T)");
@@ -265,6 +265,25 @@ public class Player {
         else{
             Random rand = new Random();
             choice = String.valueOf(rand.nextInt(cardChoices.length));
+        }
+    }
+
+    public void cardEmptyCheck(){
+        String[] playerCardList;
+        playerCardList = this.getCards().split(" \\+ ");
+        if (playerCardList.length < 1){
+            this.finished = true;
+            if (this.isPlayer){
+                System.out.println("Looks like you are out of cards!\nYou can no longer take any turns.\nYour final score is " + this.pairs + ".");
+                UserInput.pauseForEnterKey();
+            }
+            else{
+                System.out.println("Looks like " + this.getName() + " has ran out of cards and can no longer take any turns.");
+                Misc.pauseSeconds(1);
+            }
+        }
+        else{
+            this.finished = false;
         }
     }
 }

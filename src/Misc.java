@@ -116,4 +116,13 @@ public class Misc {
         }
         return arrayAsString;
     }
+
+    public static boolean checkPlayersFinished(Player[] players){
+        for (int i = 0; i < players.length; i++){
+            if (!players[i].getFinished()){
+                return false;
+            }
+        }
+        return true;
+    }
 }
