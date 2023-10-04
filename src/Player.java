@@ -135,12 +135,24 @@ public class Player {
                 System.out.println(playerToCheck.getName() + " had your card!");// Your score is now " + playerChecking.getPairs());
                 Misc.pauseSeconds(2);
                 System.out.println("Your cards are now: " + playerChecking.getCards());
+                UserInput.pauseForEnterKey();
             }
             else{
-                System.out.println(this.getName() + " asked " + playerToCheck.getName() + " if they had a " + cardChoiceBackup + "..."); //playerCheckingCards[Integer.parseInt(choice)]
+                if (playerToCheck.isPlayer){
+                    System.out.println(this.getName() + " asked if You had a " + cardChoiceBackup + "..."); //playerCheckingCards[Integer.parseInt(choice)]
+                }
+                else {
+                    System.out.println(this.getName() + " asked " + playerToCheck.getName() + " if they had a " + cardChoiceBackup + "..."); //playerCheckingCards[Integer.parseInt(choice)]
+                }
                 Misc.pauseSeconds(1);
                 System.out.println(playerToCheck.getName() + " had the card " + this.getName() + " wanted!");
-                Misc.pauseSeconds(1);
+                if (playerToCheck.isPlayer){
+                    System.out.println("Your cards are now: " + playerToCheck.getCards());
+                    UserInput.pauseForEnterKey();
+                }
+                else {
+                    Misc.pauseSeconds(1);
+                }
             }
         }
         else {
@@ -151,7 +163,14 @@ public class Player {
             else{
                 System.out.println(this.getName() + " asked " + playerToCheck.getName() + " if they had a " + cardChoiceBackup + "...");
                 Misc.pauseSeconds(1);
-                System.out.println(playerToCheck.getName() + " tells " + this.getName() + " to Go Fish.");
+                if (playerToCheck.isPlayer){
+                    System.out.println(playerToCheck.getName() + " tell " + this.getName() + " to Go Fish.");
+                    UserInput.pauseForEnterKey();
+                }
+                else {
+                    System.out.println(playerToCheck.getName() + " tells " + this.getName() + " to Go Fish.");
+                    Misc.pauseSeconds(1);
+                }
                 dealer.giveCard(playerChecking);
             }
         }
