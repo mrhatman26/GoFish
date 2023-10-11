@@ -1,8 +1,8 @@
 import java.util.Random;
 
 public class Dealer {
-    private String name;
-    private String[] cards = {"A", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+    private final String name;
+    private final String[] cards = {"A", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
     Dealer(){
         this.name = "Adeal";
     }
@@ -13,6 +13,10 @@ public class Dealer {
 
     public String[] getCards(){
         return this.cards;
+    }
+
+    public String getSingleCard(int index){
+        return cards[index];
     }
 
     public void firstServe(Player[] players, int playerCount){

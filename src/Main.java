@@ -1,3 +1,5 @@
+import com.sun.security.auth.UserPrincipal;
+
 import java.util.Scanner;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -34,16 +36,23 @@ public class Main {
             System.out.println("Round " + rounds + " begins...");
             Misc.pauseSeconds(1);
             dealer.firstServe(players, playerCount);
-            for (int i = 0; i < players.length; i++) {
-                players[i].playerTurn(players, dealer);
+            while (true) {
+                if (turns <= 1) {
+                    System.out.println("Turn " + turns + " begins...");
+                    Misc.pauseSeconds(2);
+                }
+                else{
+                    System.out.println("\nTurn " + turns + " begins...");
+                    UserInput.pauseForEnterKey();
+                }
+                for (int i = 0; i < players.length; i++) {
+                    players[i].playerTurn(players, dealer);
+                }
+                if (Misc.checkPlayersFinished(players)) {
+                    break;
+                }
+                turns++;
             }
-            if (Misc.checkPlayersFinished(players)){
-                System.out.println("True");
-            }
-            else{
-                System.out.println("False,");
-            }
-            break;
         }
     }
 }

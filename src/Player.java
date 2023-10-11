@@ -105,44 +105,48 @@ public class Player {
         hasCardCheck(this, players[choiceInt], dealer);
         this.pairCheck();
         this.cardEmptyCheck();
+        //FIX THE PLAYER GETTING ALL CARDS WHEN CHOOSING TO LIE!
     }
 
     public void hasCardCheck(Player playerChecking, Player playerToCheck, Dealer dealer){
         String[] playerCheckingCards;
         boolean pairFound = false;
-        //if (playerChecking.getIsPlayer()) {
         if (playerChecking.getLied()) {
-            playerCheckingCards = dealer.getCards();
+            String lieCard = dealer.getSingleCard(Integer.parseInt(choice));
+            lieCard = playerChecking.getCards() + " + " + lieCard;
+            playerCheckingCards = lieCard.split(" \\+ ");
+            choice = String.valueOf(playerCheckingCards.length - 1);
         } else {
             playerCheckingCards = playerChecking.getCards().split(" \\+ ");
         }
         String[] playerToCheckCards = playerToCheck.getCards().split(" \\+ ");
         char cardChoiceBackup = playerCheckingCards[Integer.valueOf(choice)].charAt(0);
-        //System.out.println("\n" + playerToCheck.getCards() + "\n");
         for (int i = 0; i < playerToCheckCards.length; i++){
-            //System.out.println(i);
             if (playerToCheckCards[i].equals(playerCheckingCards[Integer.valueOf(choice)])){
                 playerToCheckCards[i] = "";
                 pairFound = true;
                 break;
             }
         }
+        if (playerChecking.getLied()){
+            playerCheckingCards[playerCheckingCards.length - 1] = "";
+        }
         if (pairFound) {
             playerToCheck.setCards(Misc.arrayToString(playerCheckingCards, true, true));
             playerChecking.setCards(Misc.arrayToString(playerCheckingCards, true, true));
             playerChecking.setCards(playerChecking.cards + " + " + cardChoiceBackup);
             if (this.getIsPlayer()) {
-                System.out.println(playerToCheck.getName() + " had your card!");// Your score is now " + playerChecking.getPairs());
+                System.out.println(playerToCheck.getName() + " had your card!");
                 Misc.pauseSeconds(2);
                 System.out.println("Your cards are now: " + playerChecking.getCards());
                 UserInput.pauseForEnterKey();
             }
             else{
                 if (playerToCheck.isPlayer){
-                    System.out.println(this.getName() + " asked if You had a " + cardChoiceBackup + "..."); //playerCheckingCards[Integer.parseInt(choice)]
+                    System.out.println(this.getName() + " asked if You had a " + cardChoiceBackup + "...");
                 }
                 else {
-                    System.out.println(this.getName() + " asked " + playerToCheck.getName() + " if they had a " + cardChoiceBackup + "..."); //playerCheckingCards[Integer.parseInt(choice)]
+                    System.out.println(this.getName() + " asked " + playerToCheck.getName() + " if they had a " + cardChoiceBackup + "...");
                 }
                 Misc.pauseSeconds(1);
                 System.out.println(playerToCheck.getName() + " had the card " + this.getName() + " wanted!");
